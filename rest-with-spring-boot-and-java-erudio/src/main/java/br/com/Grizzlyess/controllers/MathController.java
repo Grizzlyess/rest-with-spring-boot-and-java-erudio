@@ -33,7 +33,7 @@ public class MathController {
 
         if (number2 == "0")
             throw new UnsupportedMathOperationException("Denominador não pode ser 0");
-        return convertToDouble(number1) - convertToDouble(number2);
+        return convertToDouble(number1) / convertToDouble(number2);
     }
 
     @RequestMapping("/med/{number1}/{number2}")
@@ -45,10 +45,13 @@ public class MathController {
         return (convertToDouble(number1) + convertToDouble(number2))/2.0;
     }
 
-    @RequestMapping("/raiz/{number1}/{number2}")
+    @RequestMapping("/raiz/{number1}")
     public double raiz(@PathVariable("number1") String number1) throws Exception {
         if(!isNumeric(number1))
             throw new UnsupportedMathOperationException("Please, set a numeric value|");
+
+        if (convertToDouble(number1) <=0)
+            throw new UnsupportedMathOperationException("Digite um numero real positivo");
 
         return Math.sqrt(convertToDouble(number1));
     }
