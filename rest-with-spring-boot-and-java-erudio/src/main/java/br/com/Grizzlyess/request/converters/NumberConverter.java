@@ -13,8 +13,8 @@ public class NumberConverter {
     public static boolean isNumeric( String strNumber)
     {
         if (strNumber == null || strNumber.isEmpty())
-            return false;
+            return true;
         String number = strNumber.replace(",",".");
-        return number.matches("[-+]?[0-9]*\\.?[0-9]+");
+        return !number.matches("[-+]?[0-9]*\\.?[0-9]+");
     }
 }

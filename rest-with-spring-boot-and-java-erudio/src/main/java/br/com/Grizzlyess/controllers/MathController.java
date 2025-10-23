@@ -16,7 +16,7 @@ public class MathController {
     @RequestMapping("/sum/{number1}/{number2}")
     public double sum(@PathVariable("number1") String number1,
                       @PathVariable("number2") String number2) throws Exception {
-        if(!NumberConverter.isNumeric(number1) || !NumberConverter.isNumeric(number2))
+        if(NumberConverter.isNumeric(number1) || NumberConverter.isNumeric(number2))
             throw new UnsupportedMathOperationException("Please, set a numeric value|");
         return math.sum(NumberConverter.convertToDouble(number1),NumberConverter.convertToDouble(number2));
     }
@@ -24,7 +24,7 @@ public class MathController {
     @RequestMapping("/sub/{number1}/{number2}")
     public double sub(@PathVariable("number1") String number1,
                       @PathVariable("number2") String number2) throws Exception {
-        if(!NumberConverter.isNumeric(number1) || !NumberConverter.isNumeric(number2))
+        if(NumberConverter.isNumeric(number1) || NumberConverter.isNumeric(number2))
             throw new UnsupportedMathOperationException("Please, set a numeric value|");
         return math.sub(NumberConverter.convertToDouble(number1),NumberConverter.convertToDouble(number2));
     }
@@ -32,7 +32,7 @@ public class MathController {
     @RequestMapping("/div/{number1}/{number2}")
     public double div(@PathVariable("number1") String number1,
                       @PathVariable("number2") String number2) throws Exception {
-        if(!NumberConverter.isNumeric(number1) || !NumberConverter.isNumeric(number2))
+        if(NumberConverter.isNumeric(number1) || NumberConverter.isNumeric(number2))
             throw new UnsupportedMathOperationException("Please, set a numeric value|");
 
         if (number2 == "0")
@@ -43,7 +43,7 @@ public class MathController {
     @RequestMapping("/med/{number1}/{number2}")
     public double med(@PathVariable("number1") String number1,
                       @PathVariable("number2") String number2) throws Exception {
-        if(!NumberConverter.isNumeric(number1) || !NumberConverter.isNumeric(number2))
+        if(NumberConverter.isNumeric(number1) || NumberConverter.isNumeric(number2))
             throw new UnsupportedMathOperationException("Please, set a numeric value|");
 
         return math.med(NumberConverter.convertToDouble(number1),NumberConverter.convertToDouble(number2));
@@ -51,7 +51,7 @@ public class MathController {
 
     @RequestMapping("/raiz/{number1}")
     public double raiz(@PathVariable("number1") String number1) throws Exception {
-        if(!NumberConverter.isNumeric(number1))
+        if(NumberConverter.isNumeric(number1))
             throw new UnsupportedMathOperationException("Please, set a numeric value|");
 
         if (NumberConverter.convertToDouble(number1) <=0)
