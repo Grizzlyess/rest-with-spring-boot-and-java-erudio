@@ -1,9 +1,5 @@
 package br.com.Grizzlyess.math;
 
-import br.com.Grizzlyess.exception.UnsupportedMathOperationException;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 public class SimpleMath {
 
     public double sum(Double number1, Double number2){
