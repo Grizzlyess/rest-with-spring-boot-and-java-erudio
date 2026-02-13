@@ -1,12 +1,17 @@
 package br.com.Grizzlyess.services;
 
+import br.com.Grizzlyess.data.v1.PersonDTO;
+import br.com.Grizzlyess.data.v2.PersonDTOV2;
 import br.com.Grizzlyess.exception.ResourceNotFoundException;
+import static br.com.Grizzlyess.mapper.ObjectMapper.parseListObjects;
+import static br.com.Grizzlyess.mapper.ObjectMapper.parseObject;
+
+import br.com.Grizzlyess.mapper.custom.PersonMapper;
 import br.com.Grizzlyess.model.Person;
 import br.com.Grizzlyess.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
@@ -20,28 +25,42 @@ public class PersonServices {
     @Autowired
     PersonRepository repository;
 
+    @Autowired
+    PersonMapper converter;
 
-    public List<Person> findAll(){
+
+    public List<PersonDTO> findAll(){
         logger.info("Finding all people!!! ");
-        return repository.findAll();
+        return parseListObjects(repository.findAll(), PersonDTO.class);
 
     }
 
-    public Person findById(Long id) {
+    public PersonDTO findById(Long id) {
         logger.info("Finding one Person!");
 
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No reccords found for this ID."));
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No reccords found for this ID."));
+        return parseObject(entity, PersonDTO.class);
 
     }
 
-    public Person create(Person person) {
+    public PersonDTO create(PersonDTO person) {
 
         logger.info("Creating one Person!!!");
-        return repository.save(person);
+        var entity = parseObject(person, Person.class);
+        return parseObject(repository.save(entity), PersonDTO.class);
 
     }
 
-    public Person update(Person person) {
+    public PersonDTOV2  createV2(PersonDTOV2 person) {
+
+        logger.info("Creating one Person!!!");
+        var entity = converter.convertDTOToEntity(person);
+        return converter.convertEntityToDTO(repository.save(entity));
+
+    }
+
+    public PersonDTO update(PersonDTO person) {
 
         logger.info("Updating one Person!!!");
         Person entity = repository.findById(person.getId())
@@ -52,8 +71,7 @@ public class PersonServices {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        return repository.save(person);
-
+        return parseObject(repository.save(entity), PersonDTO.class);
 
     }
 
