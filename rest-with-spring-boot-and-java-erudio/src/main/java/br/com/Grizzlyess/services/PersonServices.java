@@ -1,10 +1,13 @@
 package br.com.Grizzlyess.services;
 
+import br.com.Grizzlyess.controllers.PersonController;
 import br.com.Grizzlyess.data.v1.PersonDTO;
 import br.com.Grizzlyess.data.v2.PersonDTOV2;
 import br.com.Grizzlyess.exception.ResourceNotFoundException;
 import static br.com.Grizzlyess.mapper.ObjectMapper.parseListObjects;
 import static br.com.Grizzlyess.mapper.ObjectMapper.parseObject;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import br.com.Grizzlyess.mapper.custom.PersonMapper;
 import br.com.Grizzlyess.model.Person;
@@ -40,7 +43,9 @@ public class PersonServices {
 
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No reccords found for this ID."));
-        return parseObject(entity, PersonDTO.class);
+        var dto = parseObject(entity, PersonDTO.class);
+        addHateoasLinks(id, dto);
+        return dto;
 
     }
 
@@ -82,6 +87,15 @@ public class PersonServices {
                 .orElseThrow(() -> new ResourceNotFoundException("No reccords found for this ID."));
 
         repository.delete(entity);
+    }
+
+
+    private static void addHateoasLinks(Long id, PersonDTO dto) {
+        dto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel().withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
+        dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("update").withType("PUT"));
+        dto.add(linkTo(methodOn(PersonController.class).delete(id)).withRel("delete").withType("DELETE"));
     }
 
 
